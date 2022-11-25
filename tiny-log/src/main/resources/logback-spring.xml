@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--scan：自动扫描，debug：打印logback的日志 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+    <property name="LOG_HOME" value="./logs"/>
+    <!--设置日志输出格式-->
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+    <property name="FORMAT"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <!--设置日志名称(info)-->
+    <property name="RollingAccessFilePattern" value="${LOG_HOME}/access.%d{yyyy-MM-dd}.log"/>
+    <!--设置日志保留天数-->
+    <property name="RollingAccessMaxHistory" value="7"/>
+    <!--设置日志名称(error)-->
+    <property name="RollingErrorFilePattern" value="${LOG_HOME}/error.%d{yyyy-MM-dd}.log"/>
+    <!--设置日志保留天数-->
+    <property name="RollingErrorMaxHistory" value="30"/>
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!-- Console 输出设置 -->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${FORMAT}</pattern>
+            <charset>UTF8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!-- 按照每天生成日志文件(access) -->
+    <appender name="accessLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--配置日志级别过滤-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <!--设置滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${RollingAccessFilePattern}</FileNamePattern>
+            <MaxHistory>${RollingAccessMaxHistory}</MaxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件(error) -->
+    <appender name="errorLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--配置日志级别过滤-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置过滤级别 -->
+            <level>ERROR</level>
+            <!-- 用于配置符合过滤条件的操作 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 用于配置不符合过滤条件的操作 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${RollingErrorFilePattern}</FileNamePattern>
+            <MaxHistory>${RollingErrorMaxHistory}</MaxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <!--开发环境:debug级别-->
+    <springProfile name="dev">
+        <logger name="com.kmosi" level="debug" additivity="true">
+            <appender-ref ref="accessLogAppender"/>
+            <appender-ref ref="errorLogAppender"/>
+        </logger>
+    </springProfile>
+
+    <!--测试环境:info级别-->
+    <springProfile name="test">
+        <logger name="com.kmosi" level="info" additivity="true">
+            <appender-ref ref="accessLogAppender"/>
+            <appender-ref ref="errorLogAppender"/>
+        </logger>
+    </springProfile>
+
+    <!--生产环境:error级别-->
+    <springProfile name="prod">
+        <logger name="com.kmosi" level="error" additivity="true">
+            <appender-ref ref="errorLogAppender"/>
+        </logger>
+    </springProfile>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="consoleLog"/>
+    </root>
+</configuration>
