@@ -1,0 +1,12 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <!--name:具备唯一性，不可重复，kiebase的名称，知识库名称
+        packages:包名即kiebase会到src/main/resources目录下查找这个包名下的所有规则文件,多个包使用逗号分割
+        default:默认为false，是不是默认的资源，只可以有一个默认的-->
+    <kbase name="person-kbase" packages="com.kmosi.rule" default="false">
+        <!--kie-session:是一个会话，用于进行规则的实际执行
+            name:具备唯一性，一个kiebase可以包含多个kiesession
+            type:状态信息，分为stateless无状态和stateful有状态两种-->
+        <ksession name="person-session" type="stateless" default="false"/>
+    </kbase>
+</kmodule>

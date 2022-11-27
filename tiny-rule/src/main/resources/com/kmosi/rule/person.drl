@@ -1,0 +1,25 @@
+package com.kmosi.rule;
+import com.kmosi.rule.domain.bo.PersonBO;
+import java.util.Map;
+global Map result;
+//支持mvel和Java两种方式
+dialect  "mvel"
+rule "persion-base"
+    when
+        person:PersonBO();
+    then
+end
+
+rule "persion-adult" extends "persion-base"
+    when
+        eval(person.age>=18)
+    then
+        result.put("result",true);
+end
+
+rule "persion-child" extends "persion-base"
+    when
+        eval(person.age<18)
+    then
+        result.put("result",false);
+end
