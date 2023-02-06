@@ -1,0 +1,32 @@
+spring:
+  quartz:
+    #持久化到数据库方式
+    job-store-type: memory
+    scheduler-name: tiny-task
+    # 服务关闭时等待任务完成
+    wait-for-jobs-to-complete-on-shutdown: true
+    # 延迟启动执行
+    startup-delay: 10s
+    # quartz启动之后，会以数据库的为准，若该属性为false，则配置文件修改后不会起作用
+    overwrite-existing-jobs: false
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: BRMSTask-Scheduler
+            instanceId: AUTO
+#          jobStore:
+#            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+#            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#            # 表前缀
+#            tablePrefix: QRTZ_
+#            # 是否集群
+#            isClustered: true
+#            clusterCheckinInterval: 10000
+#            # 是否使用配置文件，不使用
+#            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
