@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kmosi.data.mapper.SysUserMapper">
+    <!--构建结果集合-->
+    <resultMap id="ResultMap" type="com.kmosi.data.bean.SysUser">
+        <id column="USER_ID" jdbcType="VARCHAR" property="userId"/>
+        <result column="USERNAME" jdbcType="VARCHAR" property="username"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="ENABLE" jdbcType="CHAR" property="enable"/>
+        <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag"/>
+        <result column="LOGIN_IP" jdbcType="VARCHAR" property="loginIp"/>
+        <result column="LOGIN_DATE" jdbcType="TIMESTAMP" property="loginDate"/>
+        <result column="REVISION" jdbcType="VARCHAR" property="revision"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+    </resultMap>
+    <!--构建基础字段-->
+    <sql id="Col_List">
+        USER_ID,
+        USERNAME,
+        PASSWORD,
+        ENABLE,
+        DEL_FLAG,
+        LOGIN_IP,
+        LOGIN_DATE,
+        REVISION,
+        CREATED_BY,
+        CREATED_DATE,
+        UPDATED_BY,
+        UPDATED_DATE
+    </sql>
+    <!--通过用户名查询-->
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="ResultMap">
+        select
+        <include refid="Col_List"/>
+        from t_sys_user
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                USERNAME like concat('%', #{username,jdbcType=VARCHAR}, '%') ESCAPE '/'
+            </if>
+        </where>
+    </select>
+    <!--通过ID删除-->
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete
+        from t_sys_user
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <!--插入用户-->
+    <insert id="insert" parameterType="com.kmosi.data.bean.SysUser">
+        insert into t_sys_user
+            (USER_ID, USERNAME, PASSWORD, ENABLE, DEL_FLAG)
+        values (#{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+                #{enable,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR})
+    </insert>
+    <!--更新用户-->
+    <update id="updateById" parameterType="com.kmosi.data.bean.SysUser">
+        update t_sys_user
+        set USERNAME     = #{username,jdbcType=VARCHAR},
+            PASSWORD     = #{password,jdbcType=VARCHAR},
+            UPDATED_BY   = #{updatedBy,jdbcType=VARCHAR},
+            UPDATED_DATE = now()
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </update>
+</mapper>
