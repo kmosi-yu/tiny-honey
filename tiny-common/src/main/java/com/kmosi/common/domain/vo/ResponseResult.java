@@ -1,9 +1,6 @@
 package com.kmosi.common.domain.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +15,8 @@ import java.io.Serializable;
 @Getter
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseResult<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -4561660494342335921L;
@@ -37,7 +36,11 @@ public class ResponseResult<T> implements Serializable {
      * 返回数据
      */
     private T data;
-
+    /**
+     * 时间戳
+     */
+    @Builder.Default
+    private Long timestamp = System.currentTimeMillis();
 
     /**
      * 成功
@@ -52,6 +55,22 @@ public class ResponseResult<T> implements Serializable {
                 .code(200)
                 .state(true)
                 .message(message)
+                .data(data)
+                .build();
+    }
+
+    /**
+     * 成功
+     *
+     * @param data 数据
+     * @param <T>  泛型
+     * @return T
+     */
+    public static <T> ResponseResult<T> buildSuccess(T data) {
+        return ResponseResult.<T>builder()
+                .code(200)
+                .state(true)
+                .message("数据请求成功！")
                 .data(data)
                 .build();
     }
