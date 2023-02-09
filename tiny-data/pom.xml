@@ -17,6 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.kmosi</groupId>
+            <artifactId>tiny-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <!--JPA的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

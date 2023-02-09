@@ -13,3 +13,25 @@ spring:
     hikari:
       username: tiny-honey
       password: tiny-honey
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      # none:
+      # 不做处理。
+      # create:
+      # 先删除表，再创建表（结构与数据均删除）。
+      # create-drop:
+      # 创建表和删除表的时间是entityManagerFactory创建和关闭的时间。
+      # update:
+      # 常用，数据不会被删除。
+      # 1.没有表会生成表。
+      # 2.有表，只是修改字段，不会更新表，会多加一个字段出来。
+      # 3.添加字段，会更新表。
+      # 4.删除一个字段，也不会更新表。
+      # validate:
+      # 生产环境。
+      # 1.表不存在，会抛出异常。
+      # 2.映射文件少属性，表比entity多属性，不会报错。
+      # 3.映射文件多属性，表比entity少属性，报错。
+      ddl-auto: update
