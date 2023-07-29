@@ -33,11 +33,22 @@ public class BarcodeUtils {
      * @return InputStream
      */
     @SneakyThrows
-    public static InputStream QRCodeInputStream(ImageMeta meta) {
+    public static InputStream generateInputStream(ImageMeta meta) {
+        return new ByteArrayInputStream(generateByte(meta));
+    }
+
+    /**
+     * 创建二维码
+     *
+     * @param meta 元数据
+     * @return byte[]
+     */
+    @SneakyThrows
+    public static byte[] generateByte(ImageMeta meta) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         var image = buildQRCode(meta);
         ImageIO.write(image, "PNG", bytes);
-        return new ByteArrayInputStream(bytes.toByteArray());
+        return bytes.toByteArray();
     }
 
     /**
@@ -47,7 +58,7 @@ public class BarcodeUtils {
      * @return OutputStream
      */
     @SneakyThrows
-    public static OutputStream QRCodeOutputStream(ImageMeta meta, String path) {
+    public static OutputStream generateOutputStream(ImageMeta meta, String path) {
         OutputStream stream = new FileOutputStream(path);
         var image = buildQRCode(meta);
         ImageIO.write(image, "PNG", stream);
@@ -62,7 +73,7 @@ public class BarcodeUtils {
      * @return boolean
      */
     @SneakyThrows
-    public static boolean QRCodeFile(ImageMeta meta, String path) {
+    public static boolean generateFile(ImageMeta meta, String path) {
         OutputStream stream = new FileOutputStream(path);
         var image = buildQRCode(meta);
         return ImageIO.write(image, "PNG", stream);
@@ -75,7 +86,7 @@ public class BarcodeUtils {
      * @return string：Base64
      */
     @SneakyThrows
-    public static String QRCodeBase64(ImageMeta meta) {
+    public static String generateBase64(ImageMeta meta) {
         BufferedImage image = buildQRCode(meta);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         ImageIO.write(image, "PNG", stream);
@@ -183,8 +194,31 @@ public class BarcodeUtils {
      * @return 字符串
      */
     @SneakyThrows
-    public static String decode(File file) {
+    public static String readContent(File file) {
         BufferedImage image = ImageIO.read(file);
+        return decode(image);
+    }
+
+    /**
+     * 内容解析
+     *
+     * @param inputStream 文件
+     * @return 字符串
+     */
+    @SneakyThrows
+    public static String readContent(InputStream inputStream) {
+        BufferedImage image = ImageIO.read(inputStream);
+        return decode(image);
+    }
+
+    /**
+     * 内容解析
+     *
+     * @param image 文件
+     * @return 字符串
+     */
+    @SneakyThrows
+    private static String decode(BufferedImage image) {
         if (image == null) {
             return "";
         }

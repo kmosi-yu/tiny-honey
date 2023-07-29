@@ -51,16 +51,19 @@ public class ImageMeta implements Serializable {
      * 开始颜色
      */
     @Getter
+    @Builder.Default
     private Color sColor = new Color(0, 0, 0);
     /**
      * 结束颜色
      */
     @Getter
+    @Builder.Default
     private Color eColor = new Color(0, 0, 0);
     /**
      * 背景颜色
      */
     @Getter
+    @Builder.Default
     private Color bgColor = new Color(255, 255, 255);
 
     @SneakyThrows

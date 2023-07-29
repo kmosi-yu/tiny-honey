@@ -2,6 +2,8 @@ package com.kmosi.common.handler;
 
 import com.kmosi.common.domain.vo.ResponseResult;
 import com.kmosi.common.exception.BizException;
+import io.minio.errors.ErrorResponseException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -66,6 +68,7 @@ public class GlobalExceptionHandler {
     public ResponseResult<Object> handlerNoHandlerFoundException(NoHandlerFoundException e) {
         return ResponseResult.buildFailure(HttpStatus.NOT_FOUND.value(), false, "资源不存在！", e.getMessage());
     }
+
     /**
      * 404 -HttpRequestMethodNotSupportedException
      *
@@ -76,5 +79,22 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     public ResponseResult<Object> handlerNoHandlerNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseResult.buildFailure(HttpStatus.METHOD_NOT_ALLOWED.value(), false, "请求方法错误！", e.getMessage());
+    }
+
+    /**
+     * 909 -ConstraintViolationException
+     *
+     * @param e 异常
+     * @return result
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseResult<Object> handlerConstraintViolationException(ConstraintViolationException e) {
+        return ResponseResult.buildFailure(909, false, e.getConstraintViolations().stream().toList().get(0).getMessage(), null);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(value = ErrorResponseException.class)
+    public ResponseResult<Object> handlerErrorResponseException(ErrorResponseException e) {
+        return ResponseResult.buildFailure(1000, false, e.getMessage(), null);
     }
 }

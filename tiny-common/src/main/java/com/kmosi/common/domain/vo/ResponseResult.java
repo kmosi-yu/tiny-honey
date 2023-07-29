@@ -1,5 +1,6 @@
 package com.kmosi.common.domain.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serial;
@@ -17,29 +18,35 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(name = "统一结果响应实体", description = "用于统一返回结果的格式")
 public class ResponseResult<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -4561660494342335921L;
     /**
      * 状态码
      */
+    @Schema(description = "状态码")
     private Integer code;
     /**
      * 状态（true/false）
      */
+    @Schema(description = "状态：成功为true；失败为false")
     private Boolean state;
     /**
      * 返回信息
      */
+    @Schema(description = "返回信息")
     private String message;
     /**
      * 返回数据
      */
+    @Schema(description = "返回数据")
     private T data;
     /**
      * 时间戳
      */
     @Builder.Default
+    @Schema(description = "时间戳")
     private Long timestamp = System.currentTimeMillis();
 
     /**
