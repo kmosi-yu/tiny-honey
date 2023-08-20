@@ -4,7 +4,7 @@ springdoc:
   group-configs:
     - group: 'AliYun-DNS'
       paths-to-match: '/**'
-      packages-to-scan: com.yudone.aliyun.api
+      packages-to-scan: com.kmosi.dns.api
 knife4j:
   enable: true
   setting:

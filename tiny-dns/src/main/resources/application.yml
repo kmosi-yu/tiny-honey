@@ -1,5 +1,5 @@
 server:
-  port: 1993
+  port: 1931
 spring:
   profiles:
     include: knife4j,aliyun,quartz
