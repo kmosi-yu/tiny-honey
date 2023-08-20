@@ -1,0 +1,5 @@
+server:
+  port: 1993
+spring:
+  profiles:
+    include: knife4j,aliyun,quartz

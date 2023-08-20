@@ -1,0 +1,20 @@
+springdoc:
+  api-docs:
+    enabled: true
+  group-configs:
+    - group: 'AliYun-DNS'
+      paths-to-match: '/**'
+      packages-to-scan: com.yudone.aliyun.api
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enableSwaggerModels: false
+    enableDocumentManage: false
+    enable-version: true
+    enable-after-script: false
+    enable-open-api: false
+    enable-group: true
+    enable-footer: false
+    enable-footer-custom: true
+    footer-custom-content: Apache License 2.0 | Copyright  2023-[ALIYUN-DNS股份有限公司](http://127.0.0.1)

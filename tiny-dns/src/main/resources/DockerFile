@@ -1,0 +1,4 @@
+FROM openjdk:17-alpine
+#VOLUME /temp
+ADD target/aliyun-ddns-1.0.1.jar aliyun-ddns-1.0.1.jar
+ENTRYPOINT ["java","-jar","/aliyun-ddns-1.0.1.jar"]
